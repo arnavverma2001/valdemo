@@ -215,7 +215,10 @@ def apply_action(state: GameState, rng: Random, action: ActionRequest) -> None:
     if action.type is ActionType.MOVE:
         if action.target is None:
             raise IllegalAction("move target is required")
-        path = validate_move(state, unit.id, action.target)
+        try:
+            path = validate_move(state, unit.id, action.target)
+        except ValueError as exc:
+            raise IllegalAction(str(exc)) from exc
         unit.pos = action.target
         unit.ap -= 1
         state.log.append(f"{unit.id} moved {len(path) - 1} tiles to ({unit.pos.x},{unit.pos.y})")
