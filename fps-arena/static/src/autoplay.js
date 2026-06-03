@@ -26,7 +26,7 @@ export class AutoplayController {
     this.yaw = lerpAngle(this.yaw, aim.yaw, turnSpeed);
     this.pitch = clamp(this.pitch + (aim.pitch - this.pitch) * turnSpeed, -1.25, 1.25);
     const refinedAim = computeAutoplayAim({ ...pose, yaw: this.yaw, pitch: this.pitch }, target);
-    const move = computeAutoplayMove(this.player.position, target, this.rng, game.world.arenaHalfSize);
+    const move = computeAutoplayMove(pose, target, this.rng, game.world.arenaHalfSize);
     const weapon = computeAutoplayWeapon(this.player.weapon, refinedAim);
     this.player.setAutoplayControls({
       ...move,
