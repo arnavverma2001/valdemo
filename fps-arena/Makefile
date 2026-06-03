@@ -12,15 +12,15 @@ install: $(VENV)/bin/activate vendor
 	$(PY) -m playwright install --with-deps chromium
 
 $(VENV)/bin/activate: pyproject.toml
-	$(PYTHON) -m venv $(VENV)
+	$(PYTHON) -c "import ensurepip" >/dev/null 2>&1 && $(PYTHON) -m venv $(VENV) || ( $(PYTHON) -m pip install --user virtualenv && $(PYTHON) -m virtualenv $(VENV) )
 	$(PIP) install --upgrade pip
 	$(PIP) install -e .
 	touch $(VENV)/bin/activate
 
 vendor:
 	mkdir -p static/vendor
-	curl -fsSL "https://unpkg.com/three@$(THREE_VERSION)/build/three.module.js" -o static/vendor/three.module.js
-	curl -fsSL "https://unpkg.com/three@$(THREE_VERSION)/examples/jsm/controls/PointerLockControls.js" -o static/vendor/PointerLockControls.js
+	( curl --retry 4 --retry-delay 2 --retry-all-errors -fsSL "https://unpkg.com/three@$(THREE_VERSION)/build/three.module.js" -o static/vendor/three.module.js || curl --retry 4 --retry-delay 2 --retry-all-errors -fsSL "https://cdn.jsdelivr.net/npm/three@$(THREE_VERSION)/build/three.module.js" -o static/vendor/three.module.js || ( npm pack three@$(THREE_VERSION) --silent && tar -xzf three-$(THREE_VERSION).tgz package/build/three.module.js && mv package/build/three.module.js static/vendor/three.module.js && rm -rf package three-$(THREE_VERSION).tgz ) )
+	( curl --retry 4 --retry-delay 2 --retry-all-errors -fsSL "https://unpkg.com/three@$(THREE_VERSION)/examples/jsm/controls/PointerLockControls.js" -o static/vendor/PointerLockControls.js || curl --retry 4 --retry-delay 2 --retry-all-errors -fsSL "https://cdn.jsdelivr.net/npm/three@$(THREE_VERSION)/examples/jsm/controls/PointerLockControls.js" -o static/vendor/PointerLockControls.js || ( npm pack three@$(THREE_VERSION) --silent && tar -xzf three-$(THREE_VERSION).tgz package/examples/jsm/controls/PointerLockControls.js && mv package/examples/jsm/controls/PointerLockControls.js static/vendor/PointerLockControls.js && rm -rf package three-$(THREE_VERSION).tgz ) )
 
 serve: $(VENV)/bin/activate vendor
 	$(PY) -m uvicorn server.main:app --host 127.0.0.1 --port $(PORT)
