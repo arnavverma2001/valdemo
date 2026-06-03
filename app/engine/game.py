@@ -142,7 +142,7 @@ def _living_not_acted(state: GameState, team: Team | None = None) -> list[Unit]:
 
 
 def _select_next_unit(state: GameState, preferred_team: Team | None = None) -> None:
-    if state.phase is not Phase.ACTION:
+    if state.phase != Phase.ACTION:
         state.active_unit_id = None
         return
     candidates: list[Unit] = []
@@ -153,7 +153,7 @@ def _select_next_unit(state: GameState, preferred_team: Team | None = None) -> N
         candidates = _living_not_acted(state, other)
     if not candidates:
         _end_round_turn(state)
-        if state.phase is not Phase.ACTION:
+        if state.phase.value != Phase.ACTION.value:
             return
         candidates = _living_not_acted(state, Team.ATTACKERS) or _living_not_acted(
             state, Team.DEFENDERS
