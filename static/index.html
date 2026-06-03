@@ -8,10 +8,35 @@
   </head>
   <body>
     <main>
-      <h1>Turn-Based Tactical Shooter</h1>
+      <section class="panel">
+        <div>
+          <p class="eyebrow">Valorant × XCOM, deterministic and bot-playable</p>
+          <h1>Turn-Based Tactical Shooter</h1>
+        </div>
+        <div class="controls">
+          <button id="new-match">New Match</button>
+          <button id="start-round">Start Round</button>
+          <button id="autoplay">Spectate (AI vs AI)</button>
+          <button id="end-activation">End Activation</button>
+          <select id="speed">
+            <option value="slow">slow</option>
+            <option value="normal">normal</option>
+            <option value="fast" selected>fast</option>
+          </select>
+        </div>
+      </section>
       <div id="winner-banner" hidden></div>
-      <canvas id="game" width="700" height="700"></canvas>
-      <pre id="log"></pre>
+      <section class="layout">
+        <canvas id="game" width="700" height="700"></canvas>
+        <aside>
+          <div id="hud"></div>
+          <h2>Event log</h2>
+          <ol id="log"></ol>
+          <p class="hint">
+            Manual mode: click a highlighted tile to move, an enemy to shoot, or use the buttons.
+          </p>
+        </aside>
+      </section>
     </main>
     <script src="/static/game.js"></script>
   </body>
