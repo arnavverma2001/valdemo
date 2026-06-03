@@ -15,7 +15,14 @@ from app.engine.game import (
     new_session,
     start_round,
 )
-from app.engine.schema import ActionRequest, BuyRequest, GameConfig, GameCreateRequest, GameState, Phase
+from app.engine.schema import (
+    ActionRequest,
+    BuyRequest,
+    GameConfig,
+    GameCreateRequest,
+    GameState,
+    Phase,
+)
 
 router = APIRouter(prefix="/api")
 GAMES: dict[str, GameSession] = {}

@@ -37,10 +37,14 @@ def test_hit_chance_exact_formula_distance_cover_and_flash() -> None:
     assert calculate_hit_chance(state, state.unit("a"), state.unit("d")) == pytest.approx(0.72)
 
     covered = state_with_positions(Vec2(x=0, y=0), Vec2(x=3, y=0), ["..c...."])
-    assert calculate_hit_chance(covered, covered.unit("a"), covered.unit("d")) == pytest.approx(0.55)
+    assert calculate_hit_chance(covered, covered.unit("a"), covered.unit("d")) == pytest.approx(
+        0.55
+    )
 
     covered.unit("a").flashed = True
-    assert calculate_hit_chance(covered, covered.unit("a"), covered.unit("d")) == pytest.approx(0.15)
+    assert calculate_hit_chance(covered, covered.unit("a"), covered.unit("d")) == pytest.approx(
+        0.15
+    )
 
 
 def test_hit_chance_clamps_min_and_max() -> None:

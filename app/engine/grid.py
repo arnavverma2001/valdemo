@@ -57,8 +57,8 @@ def line_tiles(a: Vec2, b: Vec2) -> list[Vec2]:
     out: list[Vec2] = []
     for i in range(steps + 1):
         t = i / steps
-        x = int(ceil(a.x + dx * t - 0.5))
-        y = int(ceil(a.y + dy * t - 0.5))
+        x = ceil(a.x + dx * t - 0.5)
+        y = ceil(a.y + dy * t - 0.5)
         pos = Vec2(x=x, y=y)
         if pos.as_tuple() not in seen:
             seen.add(pos.as_tuple())

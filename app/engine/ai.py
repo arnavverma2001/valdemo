@@ -28,7 +28,9 @@ def enumerate_legal_actions(state: GameState, unit_id: str) -> list[ActionReques
             if tile != unit.pos:
                 actions.append(ActionRequest(type=ActionType.MOVE, unit_id=unit_id, target=tile))
         for enemy in visible_enemies(state, unit):
-            actions.append(ActionRequest(type=ActionType.SHOOT, unit_id=unit_id, target_unit_id=enemy.id))
+            actions.append(
+                ActionRequest(type=ActionType.SHOOT, unit_id=unit_id, target_unit_id=enemy.id)
+            )
         if not unit.ability_used:
             actions.extend(_ability_candidates(state, unit))
         if can_plant(state, unit):
@@ -57,7 +59,9 @@ def _ability_candidates(state: GameState, unit: Unit) -> list[ActionRequest]:
         enemies = Team.DEFENDERS if unit.team is Team.ATTACKERS else Team.ATTACKERS
         for enemy in state.living_units(enemies):
             if has_los(state.map, unit.pos, enemy.pos, state.smokes):
-                midpoint = Vec2(x=(unit.pos.x + enemy.pos.x) // 2, y=(unit.pos.y + enemy.pos.y) // 2)
+                midpoint = Vec2(
+                    x=(unit.pos.x + enemy.pos.x) // 2, y=(unit.pos.y + enemy.pos.y) // 2
+                )
                 targets.append(midpoint)
         targets.append(nearest_site_tile(state, unit))
     return [
@@ -95,7 +99,9 @@ def _score_ability(state: GameState, unit: Unit, action: ActionRequest) -> float
     if ability == "flash" and action.target is not None:
         enemies = Team.DEFENDERS if unit.team is Team.ATTACKERS else Team.ATTACKERS
         affected = sum(
-            1 for enemy in state.living_units(enemies) if chebyshev_distance(enemy.pos, action.target) <= 2
+            1
+            for enemy in state.living_units(enemies)
+            if chebyshev_distance(enemy.pos, action.target) <= 2
         )
         return 18.0 * affected
     if ability == "smoke":
@@ -110,7 +116,9 @@ def _score_move(state: GameState, unit: Unit, target: Vec2) -> float:
         if unit.has_spike:
             score += 10.0
     elif state.spike.planted and state.spike.pos is not None:
-        score -= chebyshev_distance(target, state.spike.pos) * (3.0 if unit.team is Team.DEFENDERS else 1.0)
+        score -= chebyshev_distance(target, state.spike.pos) * (
+            3.0 if unit.team is Team.DEFENDERS else 1.0
+        )
     else:
         enemies = Team.DEFENDERS if unit.team is Team.ATTACKERS else Team.ATTACKERS
         living = state.living_units(enemies)
@@ -119,7 +127,9 @@ def _score_move(state: GameState, unit: Unit, target: Vec2) -> float:
     if target_has_cover(state.map, _nearest_enemy_pos(state, unit), target):
         score += 6.0
     risk = 0
-    for enemy in state.living_units(Team.DEFENDERS if unit.team is Team.ATTACKERS else Team.ATTACKERS):
+    for enemy in state.living_units(
+        Team.DEFENDERS if unit.team is Team.ATTACKERS else Team.ATTACKERS
+    ):
         if has_los(state.map, enemy.pos, target, state.smokes):
             risk += 1
     score -= risk * 4.0
@@ -133,7 +143,9 @@ def _nearest_enemy_pos(state: GameState, unit: Unit) -> Vec2:
     return min(enemies, key=lambda e: (chebyshev_distance(unit.pos, e.pos), e.id)).pos
 
 
-def choose_action(state: GameState, rng: Random, difficulty: AIDifficulty | None = None) -> ActionRequest:
+def choose_action(
+    state: GameState, rng: Random, difficulty: AIDifficulty | None = None
+) -> ActionRequest:
     difficulty = difficulty or state.config.difficulty
     unit_id = state.active_unit_id
     if unit_id is None:

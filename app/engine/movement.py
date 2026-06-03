@@ -6,11 +6,11 @@ from app.engine.grid import in_bounds, is_walkable_tile, neighbors4, tile_at
 from app.engine.schema import GameState, Vec2
 
 
-def occupied_positions(state: GameState, excluding_unit_id: str | None = None) -> set[tuple[int, int]]:
+def occupied_positions(
+    state: GameState, excluding_unit_id: str | None = None
+) -> set[tuple[int, int]]:
     return {
-        unit.pos.as_tuple()
-        for unit in state.units
-        if unit.alive and unit.id != excluding_unit_id
+        unit.pos.as_tuple() for unit in state.units if unit.alive and unit.id != excluding_unit_id
     }
 
 

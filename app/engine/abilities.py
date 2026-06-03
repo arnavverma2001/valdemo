@@ -14,13 +14,18 @@ def radius_tiles(state: GameState, center: Vec2, radius: int) -> list[Vec2]:
     for y in range(center.y - radius, center.y + radius + 1):
         for x in range(center.x - radius, center.x + radius + 1):
             pos = Vec2(x=x, y=y)
-            if in_bounds(state.map, pos) and chebyshev_distance(center, pos) <= radius:
-                if tile_at(state.map, pos) is not TileType.WALL:
-                    tiles.append(pos)
+            if (
+                in_bounds(state.map, pos)
+                and chebyshev_distance(center, pos) <= radius
+                and tile_at(state.map, pos) is not TileType.WALL
+            ):
+                tiles.append(pos)
     return sorted(tiles)
 
 
-def validate_ability_common(state: GameState, unit: Unit, ability_name: str, target: Vec2 | None) -> None:
+def validate_ability_common(
+    state: GameState, unit: Unit, ability_name: str, target: Vec2 | None
+) -> None:
     if target is None:
         raise AbilityError("ability target is required")
     if unit.ability_used:
@@ -50,7 +55,9 @@ def use_ability(state: GameState, unit: Unit, target: Vec2 | None) -> str:
 
 def use_smoke(state: GameState, unit: Unit, target: Vec2) -> str:
     data = content.ABILITIES["smoke"]
-    state.smokes.append(SmokeZone(tiles=radius_tiles(state, target, data.radius), turns_left=data.duration))
+    state.smokes.append(
+        SmokeZone(tiles=radius_tiles(state, target, data.radius), turns_left=data.duration)
+    )
     unit.ap -= 1
     unit.ability_used = True
     return f"{unit.id} smoked ({target.x},{target.y})"

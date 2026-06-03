@@ -6,8 +6,14 @@ from random import Random
 from app.engine import content
 from app.engine.abilities import AbilityError, use_ability
 from app.engine.combat import calculate_hit_chance, shoot
-from app.engine.economy import EconomyError, apply_buy as economy_apply_buy
-from app.engine.economy import award_kill, award_plant, bot_buy_requests, settle_round_economy
+from app.engine.economy import (
+    EconomyError,
+    award_kill,
+    award_plant,
+    bot_buy_requests,
+    settle_round_economy,
+)
+from app.engine.economy import apply_buy as economy_apply_buy
 from app.engine.grid import chebyshev_distance, in_bounds, is_site_tile, tile_at
 from app.engine.movement import validate_move
 from app.engine.schema import (
@@ -149,7 +155,9 @@ def _select_next_unit(state: GameState, preferred_team: Team | None = None) -> N
         _end_round_turn(state)
         if state.phase is not Phase.ACTION:
             return
-        candidates = _living_not_acted(state, Team.ATTACKERS) or _living_not_acted(state, Team.DEFENDERS)
+        candidates = _living_not_acted(state, Team.ATTACKERS) or _living_not_acted(
+            state, Team.DEFENDERS
+        )
     if not candidates:
         state.active_unit_id = None
         return
@@ -293,9 +301,7 @@ def _check_round_end(state: GameState) -> None:
     winner: Team | None = None
     if not state.living_units(Team.DEFENDERS):
         winner = Team.ATTACKERS
-    elif not state.living_units(Team.ATTACKERS):
-        winner = Team.DEFENDERS
-    elif state.spike.defused:
+    elif not state.living_units(Team.ATTACKERS) or state.spike.defused:
         winner = Team.DEFENDERS
     elif state.spike.planted and state.spike.turns_to_detonate <= 0:
         winner = Team.ATTACKERS
@@ -359,8 +365,8 @@ def nearest_site_tile(state: GameState, unit: Unit) -> Vec2:
 
 
 def assert_invariants(state: GameState) -> None:
-    assert state.scores.ATTACKERS <= state.config.match_to
-    assert state.scores.DEFENDERS <= state.config.match_to
+    assert state.config.match_to >= state.scores.ATTACKERS
+    assert state.config.match_to >= state.scores.DEFENDERS
     assert state.credits.ATTACKERS >= 0 and state.credits.DEFENDERS >= 0
     occupied: set[tuple[int, int]] = set()
     for unit in state.units:

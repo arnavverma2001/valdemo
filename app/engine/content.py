@@ -18,10 +18,20 @@ WEAPONS: dict[str, WeaponData] = {
         name="pistol", cost=0, base_accuracy=0.75, optimal_range=3, falloff_per_tile=0.06, damage=26
     ),
     "rifle": WeaponData(
-        name="rifle", cost=2900, base_accuracy=0.80, optimal_range=6, falloff_per_tile=0.04, damage=39
+        name="rifle",
+        cost=2900,
+        base_accuracy=0.80,
+        optimal_range=6,
+        falloff_per_tile=0.04,
+        damage=39,
     ),
     "sniper": WeaponData(
-        name="sniper", cost=4700, base_accuracy=0.70, optimal_range=10, falloff_per_tile=0.02, damage=90
+        name="sniper",
+        cost=4700,
+        base_accuracy=0.70,
+        optimal_range=10,
+        falloff_per_tile=0.02,
+        damage=90,
     ),
     "shotgun": WeaponData(
         name="shotgun",

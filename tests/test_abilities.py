@@ -43,7 +43,7 @@ def test_ability_once_per_round() -> None:
     state.unit("A1").ap = 2
     action = ActionRequest(type=ActionType.ABILITY, unit_id="A1", target=Vec2(x=2, y=0))
     apply_action(state, Random(1), action)
-    with pytest.raises(ValueError, match="not that unit|already used"):
+    with pytest.raises(ValueError, match=r"not that unit|already used"):
         apply_action(state, Random(1), action)
 
 

@@ -1,17 +1,17 @@
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
-class Team(str, Enum):
+class Team(StrEnum):
     ATTACKERS = "ATTACKERS"
     DEFENDERS = "DEFENDERS"
 
 
-class TileType(str, Enum):
+class TileType(StrEnum):
     FLOOR = "FLOOR"
     WALL = "WALL"
     HALF_COVER = "HALF_COVER"
@@ -19,14 +19,14 @@ class TileType(str, Enum):
     SITE_B = "SITE_B"
 
 
-class Phase(str, Enum):
+class Phase(StrEnum):
     BUY = "BUY"
     ACTION = "ACTION"
     ROUND_END = "ROUND_END"
     MATCH_END = "MATCH_END"
 
 
-class ActionType(str, Enum):
+class ActionType(StrEnum):
     MOVE = "move"
     SHOOT = "shoot"
     ABILITY = "ability"
@@ -35,7 +35,7 @@ class ActionType(str, Enum):
     END_ACTIVATION = "end_activation"
 
 
-class AIDifficulty(str, Enum):
+class AIDifficulty(StrEnum):
     EASY = "easy"
     NORMAL = "normal"
 
@@ -49,7 +49,7 @@ class Vec2(BaseModel):
     def as_tuple(self) -> tuple[int, int]:
         return (self.x, self.y)
 
-    def __lt__(self, other: "Vec2") -> bool:
+    def __lt__(self, other: Vec2) -> bool:
         return self.as_tuple() < other.as_tuple()
 
 
@@ -73,7 +73,7 @@ class MapData(BaseModel):
         return tiles
 
     @model_validator(mode="after")
-    def validate_dimensions(self) -> "MapData":
+    def validate_dimensions(self) -> MapData:
         if len(self.tiles) != self.height or len(self.tiles[0]) != self.width:
             raise ValueError("map dimensions must match tile matrix")
         return self
@@ -113,7 +113,7 @@ class GameConfig(BaseModel):
     difficulty: AIDifficulty = AIDifficulty.NORMAL
 
     @model_validator(mode="after")
-    def apply_quick_defaults(self) -> "GameConfig":
+    def apply_quick_defaults(self) -> GameConfig:
         if self.quick:
             self.match_to = min(self.match_to, 2)
             self.swap_after = min(self.swap_after, 2)

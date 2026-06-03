@@ -32,7 +32,9 @@ def apply_buy(state: GameState, request: BuyRequest) -> None:
     if request.armor:
         unit.armor = content.LIGHT_ARMOR_VALUE
     state.credits.set(unit.team, credits - cost)
-    state.log.append(f"{unit.id} bought {request.weapon or 'nothing'}{' + armor' if request.armor else ''}")
+    state.log.append(
+        f"{unit.id} bought {request.weapon or 'nothing'}{' + armor' if request.armor else ''}"
+    )
 
 
 def bot_buy_requests(state: GameState, team: Team) -> list[BuyRequest]:
