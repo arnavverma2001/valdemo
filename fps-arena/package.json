@@ -1,0 +1,10 @@
+{
+  "name": "fps-arena",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/unit/*.test.js",
+    "test:unit": "node --test tests/unit/*.test.js"
+  }
+}

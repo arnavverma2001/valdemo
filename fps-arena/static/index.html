@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FPS Arena</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three.module.js",
+          "three/addons/controls/PointerLockControls.js": "./vendor/PointerLockControls.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="game-root">
+      <canvas id="game-canvas"></canvas>
+      <div id="hud">
+        <div class="hud-panel">
+          <div class="hud-row">HP <span id="health-value">100</span></div>
+          <div class="health-shell"><div id="health-fill"></div></div>
+          <div class="hud-row">Ammo <span id="ammo-value">30/30</span></div>
+          <div class="hud-row">Wave <span id="wave-value">0</span></div>
+          <div class="hud-row">Score <span id="score-value">0</span></div>
+          <div class="hud-row">Kills <span id="kills-value">0</span></div>
+        </div>
+        <div id="status-text">Click to play</div>
+      </div>
+      <div id="crosshair" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div id="hit-marker" aria-hidden="true">×</div>
+      <div id="damage-flash" aria-hidden="true"></div>
+      <div id="start-overlay">
+        <div class="overlay-card">
+          <h1>FPS Arena</h1>
+          <p>Clear the waves. Survive the bots.</p>
+          <p class="small">WASD move · Mouse look · Hold click fire · R reload · Shift sprint · Space jump</p>
+          <button id="start-button" type="button">Click to play</button>
+        </div>
+      </div>
+      <div id="result-banner" aria-live="polite"></div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
